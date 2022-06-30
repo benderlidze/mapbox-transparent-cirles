@@ -40,12 +40,33 @@
         });
 
         map.on('load', () => {
+
+            map.addSource('points', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': []
+                }
+            });
+
             map.addSource('maine', {
                 'type': 'geojson',
                 'data': {
                     "type": "Feature",
                     "properties": {},
                     "geometry": { "type": "Point", "coordinates": [0, 0] }
+                }
+            });
+            // Add a circle layer
+            map.addLayer({
+                'id': 'circle',
+                'type': 'circle',
+                'source': 'points',
+                'paint': {
+                    'circle-color': 'orange',
+                    'circle-radius': 8,
+                    // 'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
                 }
             });
 
@@ -73,11 +94,13 @@
             // });
 
             const center = [-80.676059, 35.444908];
+
             const radius = 50;
             const options = { steps: 60, units: 'miles', properties: { foo: 'bar' } };
             const circle = turf.circle(center, radius, options);
 
             map.getSource("maine").setData(circle)
+            map.getSource("points").setData(turf.point(center))
         });
     </script>
 
