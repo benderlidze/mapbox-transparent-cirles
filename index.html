@@ -27,25 +27,28 @@
 <body>
     <div id="map"></div>
     <script>
+
+        const centers = [
+            [35.444908, -80.676059]
+        ]
         mapboxgl.accessToken = 'pk.eyJ1Ijoib2Jvemt1cnR6aXAiLCJhIjoiY2w1MTlibHJuMDNpMDNkcGYxMzNzdGpxYyJ9.MKEqnQ9d7DvfNemJvALDmQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/obozkurtzip/ckvcj4kfr08iw14rtbsaebb8o',
-            center: [-75.343, 39.984], // starting position
+            center: [-80.676059, 35.444908], // starting position
             zoom: 7 // starting zoom
         });
 
         map.on('load', () => {
-            // Add a data source containing GeoJSON data.
             map.addSource('maine', {
                 'type': 'geojson',
                 'data': {
-                    'type': 'Feature',
-                    'geometry': {}
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": { "type": "Point", "coordinates": [0, 0] }
                 }
             });
 
-            // Add a new layer to visualize the polygon.
             map.addLayer({
                 'id': 'maine',
                 'type': 'fill',
@@ -56,6 +59,7 @@
                     'fill-opacity': 0.25
                 }
             });
+
             // Add a black outline around the polygon.
             // map.addLayer({
             //     'id': 'outline',
@@ -68,8 +72,7 @@
             //     }
             // });
 
-
-            const center = [-75.343, 39.984];
+            const center = [-80.676059, 35.444908];
             const radius = 50;
             const options = { steps: 60, units: 'miles', properties: { foo: 'bar' } };
             const circle = turf.circle(center, radius, options);
