@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Add a polygon to a map using a GeoJSON source</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoib2Jvemt1cnR6aXAiLCJhIjoiY2w1MTlibHJuMDNpMDNkcGYxMzNzdGpxYyJ9.MKEqnQ9d7DvfNemJvALDmQ';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/obozkurtzip/ckvcj4kfr08iw14rtbsaebb8o',
+            center: [-75.343, 39.984], // starting position
+            zoom: 7 // starting zoom
+        });
+
+        map.on('load', () => {
+            // Add a data source containing GeoJSON data.
+            map.addSource('maine', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {}
+                }
+            });
+
+            // Add a new layer to visualize the polygon.
+            map.addLayer({
+                'id': 'maine',
+                'type': 'fill',
+                'source': 'maine', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.25
+                }
+            });
+            // Add a black outline around the polygon.
+            // map.addLayer({
+            //     'id': 'outline',
+            //     'type': 'line',
+            //     'source': 'maine',
+            //     'layout': {},
+            //     'paint': {
+            //         'line-color': '#000',
+            //         'line-width': 3
+            //     }
+            // });
+
+
+            const center = [-75.343, 39.984];
+            const radius = 50;
+            const options = { steps: 60, units: 'miles', properties: { foo: 'bar' } };
+            const circle = turf.circle(center, radius, options);
+
+            map.getSource("maine").setData(circle)
+        });
+    </script>
+
+</body>
+
+</html>
